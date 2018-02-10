@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const mongodb = require('mongodb');
+const hbs = require('hbs');
 
 
 var dbConn = mongodb.MongoClient.connect('mongodb://localhost:27017');
@@ -18,7 +19,28 @@ var app = express();
 
 
 app.use(bodyParser.urlencoded({extended: false}));
-app.use(express.static(__dirname  + '/public'))
+// app.use(express.static(__dirname  + '/public'))
+
+
+app.set('view engine', 'hbs')
+hbs.registerPartials(__dirname + '/views/partials');
+
+
+
+
+app.get('/', (req, res)=>{
+
+  res.render('home.hbs',{})
+
+});
+
+app.get('/list', (req, res)=>{
+
+  res.render('list.hbs',{})
+
+});
+
+
 
 app.post('/post-feedback', (req, res)=>{
   dbConn.then((db)=>{
